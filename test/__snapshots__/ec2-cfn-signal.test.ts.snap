@@ -1,0 +1,334 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot matches the resources correctly 1`] = `
+Object {
+  "Parameters": Object {
+    "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/ami-amazon-linux-latest/amzn-ami-hvm-x86_64-gp2",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "signalTest4CB02DE8778b66462542f2d1": Object {
+      "CreationPolicy": Object {
+        "ResourceSignal": Object {
+          "Count": 1,
+          "Timeout": "PT5M",
+        },
+      },
+      "DependsOn": Array [
+        "signalTestInstanceRoleDefaultPolicyD50F9753",
+        "signalTestInstanceRole0AB74203",
+      ],
+      "Metadata": Object {
+        "AWS::CloudFormation::Init": Object {
+          "config": Object {
+            "commands": Object {
+              "000": Object {
+                "command": "curl -fsSL https://rpm.nodesource.com/setup_14.x | bash -",
+              },
+              "001": Object {
+                "command": "yum install -y nodejs",
+              },
+            },
+            "packages": Object {
+              "yum": Object {
+                "gcc": Array [],
+                "gcc-c++": Array [],
+                "make": Array [],
+              },
+            },
+          },
+          "configSets": Object {
+            "default": Array [
+              "config",
+            ],
+          },
+        },
+      },
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "IamInstanceProfile": Object {
+          "Ref": "signalTestInstanceProfile95D7849D",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestamznamihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "t2.micro",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "signalTestInstanceSecurityGroup358F2882",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "signalVPCpublicSubnet1Subnet540D7DF1",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalTest",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "#!/bin/bash
+# fingerprint: 7767231f61ef48e2
+(
+  set +e
+  /opt/aws/bin/cfn-init -v --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource signalTest4CB02DE8778b66462542f2d1 -c default
+  /opt/aws/bin/cfn-signal -e $? --region ",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                Object {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource signalTest4CB02DE8778b66462542f2d1
+  cat /var/log/cfn-init.log >&2
+)",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "signalTestInstanceProfile95D7849D": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "signalTestInstanceRole0AB74203",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "signalTestInstanceRole0AB74203": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalTest",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "signalTestInstanceRoleDefaultPolicyD50F9753": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "cloudformation:DescribeStackResource",
+                "cloudformation:SignalResource",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Ref": "AWS::StackId",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "signalTestInstanceRoleDefaultPolicyD50F9753",
+        "Roles": Array [
+          Object {
+            "Ref": "signalTestInstanceRole0AB74203",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "signalTestInstanceSecurityGroup358F2882": Object {
+      "Properties": Object {
+        "GroupDescription": "MyTestStack/signalTest/InstanceSecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalTest",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "signalVPCFCF90A88",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "signalVPCFCF90A88": Object {
+      "Properties": Object {
+        "CidrBlock": "192.168.0.0/24",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalVPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "signalVPCIGWF8244CB3": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalVPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "signalVPCVPCGWEEFB2CA9": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "signalVPCIGWF8244CB3",
+        },
+        "VpcId": Object {
+          "Ref": "signalVPCFCF90A88",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "signalVPCpublicSubnet1DefaultRoute3417F1B4": Object {
+      "DependsOn": Array [
+        "signalVPCVPCGWEEFB2CA9",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "signalVPCIGWF8244CB3",
+        },
+        "RouteTableId": Object {
+          "Ref": "signalVPCpublicSubnet1RouteTable23D471D1",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "signalVPCpublicSubnet1RouteTable23D471D1": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalVPC/publicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "signalVPCFCF90A88",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "signalVPCpublicSubnet1RouteTableAssociation9266FFE4": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "signalVPCpublicSubnet1RouteTable23D471D1",
+        },
+        "SubnetId": Object {
+          "Ref": "signalVPCpublicSubnet1Subnet540D7DF1",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "signalVPCpublicSubnet1Subnet540D7DF1": Object {
+      "Properties": Object {
+        "AvailabilityZone": Object {
+          "Fn::Select": Array [
+            0,
+            Object {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "192.168.0.0/25",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "MyTestStack/signalVPC/publicSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "signalVPCFCF90A88",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+  },
+}
+`;
