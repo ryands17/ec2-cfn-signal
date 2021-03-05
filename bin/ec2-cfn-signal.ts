@@ -6,6 +6,6 @@ import { Ec2CfnSignalStack } from '../lib/ec2-cfn-signal-stack'
 const app = new cdk.App()
 new Ec2CfnSignalStack(app, 'Ec2CfnSignalStack', {
   env: {
-    region: app.node.tryGetContext('region'),
+    region: app.node.tryGetContext('region') || 'us-east-2',
   },
 })
