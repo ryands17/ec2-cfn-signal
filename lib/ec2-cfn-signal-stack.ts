@@ -25,7 +25,9 @@ export class Ec2CfnSignalStack extends cdk.Stack {
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO
       ),
-      machineImage: ec2.MachineImage.latestAmazonLinux(),
+      machineImage: ec2.MachineImage.latestAmazonLinux({
+        generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+      }),
       init: ec2.CloudFormationInit.fromElements(
         ec2.InitPackage.yum('gcc'),
         ec2.InitPackage.yum('gcc-c++'),
